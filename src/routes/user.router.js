@@ -30,4 +30,12 @@ router.post('/remove/:userId', verifyToken, async (req, res) => {
     res.status(400).json({ message: 'Could not removed connection.' })
   }
 })
+router.get('/contacts', verifyToken, async (req, res) => {
+  const contactList = await userService.getContactList(req.user.id)
+  if (contactList) {
+    res.json(contactList)
+  } else {
+    res.status(400).json({ message: 'Something went wrong.' })
+  }
+})
 module.exports = router

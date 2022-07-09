@@ -122,6 +122,15 @@ class UserService {
       return false
     }
   }
+
+  async getContactList (userId) {
+    try {
+      const user = await User.findOne({ _id: userId })
+      return user.contacts
+    } catch (error) {
+      return null
+    }
+  }
 }
 
 module.exports = UserService
