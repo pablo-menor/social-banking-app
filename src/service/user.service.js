@@ -49,6 +49,30 @@ class UserService {
       return null
     }
   }
+
+  async findByAccount (accountNumber) {
+    try {
+      const user = await User.findOne({ 'account.number': accountNumber })
+      return user
+    } catch (error) {
+      return null
+    }
+  }
+
+  async requestConnection (userRequesting, userRequested) {
+    const { account } = await User.findById({ _id: userRequesting.id })
+    const requestedUser = await User.findById({ _id: userRequested.id })
+    requestedUser.requests.push({
+      senderId: userRequesting.id,
+      name: userRequesting.name,
+      account
+    })
+    try {
+      return await User.updateOne({ _id: userRequested.id }, requestedUser)
+    } catch (error) {
+      return null
+    }
+  }
 }
 
 module.exports = UserService

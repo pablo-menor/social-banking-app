@@ -32,7 +32,15 @@ const userSchema = mongoose.Schema({
       name: String,
       account: String
     }
+  ],
+  requests: [
+    {
+      senderId: String,
+      name: String,
+      account: String
+    }
   ]
+
 })
 
 module.exports = mongoose.model('User', userSchema)
