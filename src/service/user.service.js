@@ -50,9 +50,22 @@ class UserService {
     }
   }
 
+  async updateUser (user) {
+    return await User.updateOne({ _id: user.id }, user)
+  }
+
   async findByAccount (accountNumber) {
     try {
       const user = await User.findOne({ 'account.number': accountNumber })
+      return user
+    } catch (error) {
+      return null
+    }
+  }
+
+  async findById (userId) {
+    try {
+      const user = await User.findOne({ _id: userId })
       return user
     } catch (error) {
       return null

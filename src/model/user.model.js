@@ -40,7 +40,8 @@ const userSchema = mongoose.Schema({
       name: String,
       account: String
     }
-  ]
+  ],
+  transactions: [String]
 
 })
 
