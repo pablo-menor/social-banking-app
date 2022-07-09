@@ -23,4 +23,11 @@ router.post('/accept/:userId', verifyToken, async (req, res) => {
   }
 })
 
+router.post('/remove/:userId', verifyToken, async (req, res) => {
+  if (await userService.removeConnection(req.params.userId, req.user.id)) {
+    res.json({ message: 'Connection removed.' })
+  } else {
+    res.status(400).json({ message: 'Could not removed connection.' })
+  }
+})
 module.exports = router

@@ -6,7 +6,7 @@ const AccountService = require('./account.service')
 const accountService = new AccountService()
 
 class UserService {
-  async signup(user) {
+  async signup (user) {
     try {
       // Create new account
       const { _id, number } = await accountService.createAccount(user.balance)
@@ -33,7 +33,7 @@ class UserService {
     }
   }
 
-  async login({ name, password }) {
+  async login ({ name, password }) {
     try {
       const user = await User.findOne({ name })
       if (user && await bcrypt.compare(password, user.password)) {
@@ -50,7 +50,7 @@ class UserService {
     }
   }
 
-  async findByAccount(accountNumber) {
+  async findByAccount (accountNumber) {
     try {
       const user = await User.findOne({ 'account.number': accountNumber })
       return user
@@ -59,7 +59,7 @@ class UserService {
     }
   }
 
-  async requestConnection(userRequesting, userRequested) {
+  async requestConnection (userRequesting, userRequested) {
     const { account } = await User.findById({ _id: userRequesting.id })
     const requestedUser = await User.findById({ _id: userRequested.id })
     requestedUser.requests.push({
@@ -100,6 +100,23 @@ class UserService {
         return user.senderId !== userRequesting.id
       })
       await User.updateOne({ _id: userRequested.id }, userRequested)
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  async removeConnection (id1, id2) {
+    try {
+      const user1 = await User.findById({ _id: id1 })
+      const user2 = await User.findById({ _id: id2 })
+
+      user1.contacts = user1.contacts.filter(contact => contact.account !== user2.account.number)
+      user2.contacts = user2.contacts.filter(contact => contact.account !== user1.account.number)
+
+      await User.updateOne({ _id: user1.id }, user1)
+      await User.updateOne({ _id: user2.id }, user2)
+
       return true
     } catch (error) {
       return false
