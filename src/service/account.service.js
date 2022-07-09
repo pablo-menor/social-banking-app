@@ -3,7 +3,7 @@ const Account = require('../model/account.model')
 class AccountService {
   async createAccount (balance) {
     try {
-      const number = this.generateAccount() // Generates a ramdom 10 digit account
+      const number = this.generateAccount() // Generates a random 10 digit account
       const newAccount = new Account({ number, balance })
       return await newAccount.save()
     } catch (err) {

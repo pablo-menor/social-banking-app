@@ -15,4 +15,12 @@ router.post('/add/:accountNumber', verifyToken, async (req, res) => {
   }
 })
 
+router.post('/accept/:userId', verifyToken, async (req, res) => {
+  if (await userService.acceptConnection(req.params.userId, req.user.id)) {
+    res.json({ message: 'Connection added.' })
+  } else {
+    res.status(400).json({ message: 'Could not add connection.' })
+  }
+})
+
 module.exports = router

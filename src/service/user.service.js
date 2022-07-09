@@ -6,7 +6,7 @@ const AccountService = require('./account.service')
 const accountService = new AccountService()
 
 class UserService {
-  async signup (user) {
+  async signup(user) {
     try {
       // Create new account
       const { _id, number } = await accountService.createAccount(user.balance)
@@ -33,7 +33,7 @@ class UserService {
     }
   }
 
-  async login ({ name, password }) {
+  async login({ name, password }) {
     try {
       const user = await User.findOne({ name })
       if (user && await bcrypt.compare(password, user.password)) {
@@ -50,7 +50,7 @@ class UserService {
     }
   }
 
-  async findByAccount (accountNumber) {
+  async findByAccount(accountNumber) {
     try {
       const user = await User.findOne({ 'account.number': accountNumber })
       return user
@@ -59,7 +59,7 @@ class UserService {
     }
   }
 
-  async requestConnection (userRequesting, userRequested) {
+  async requestConnection(userRequesting, userRequested) {
     const { account } = await User.findById({ _id: userRequesting.id })
     const requestedUser = await User.findById({ _id: userRequested.id })
     requestedUser.requests.push({
@@ -71,6 +71,38 @@ class UserService {
       return await User.updateOne({ _id: userRequested.id }, requestedUser)
     } catch (error) {
       return null
+    }
+  }
+
+  async acceptConnection (userRequestingId, userRequestedId) {
+    try {
+      const userRequesting = await User.findById({ _id: userRequestingId }) // User 1
+      const userRequested = await User.findById({ _id: userRequestedId }) // User 2
+
+      // Update user 1
+      userRequesting.contacts.push({
+        name: userRequested.name,
+        account: userRequested.account.number,
+        age: userRequested.age
+      })
+      await User.updateOne({ _id: userRequesting.id }, userRequesting)
+
+      // Update user 2
+      userRequested.contacts.push({
+        name: userRequesting.name,
+        account: userRequesting.account.number,
+        age: userRequesting.age
+      })
+
+      userRequested.requests = userRequested.requests.filter(user => {
+        console.log(user.senderId)
+        console.log(userRequesting.id)
+        return user.senderId !== userRequesting.id
+      })
+      await User.updateOne({ _id: userRequested.id }, userRequested)
+      return true
+    } catch (error) {
+      return false
     }
   }
 }

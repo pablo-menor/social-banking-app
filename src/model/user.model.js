@@ -30,7 +30,8 @@ const userSchema = mongoose.Schema({
   contacts: [
     {
       name: String,
-      account: String
+      account: String,
+      age: Number
     }
   ],
   requests: [
