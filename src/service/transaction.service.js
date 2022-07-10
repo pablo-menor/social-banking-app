@@ -5,6 +5,7 @@ const userService = new UserService()
 const Transaction = require('../model/transaction.model')
 
 class TransactionService {
+  // Creates a new transaction and saves it
   async doTransaction (senderId, receiverId, amount) {
     try {
       const sender = await userService.findById(senderId)

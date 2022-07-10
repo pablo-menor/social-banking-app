@@ -72,6 +72,12 @@ class UserService {
     }
   }
 
+  /**
+   *
+   * @param {string} userRequesting
+   * @param {string} userRequested
+   * @returns {User}
+   */
   async requestConnection (userRequesting, userRequested) {
     const { account } = await User.findById({ _id: userRequesting.id })
     const requestedUser = await User.findById({ _id: userRequested.id })
@@ -87,6 +93,12 @@ class UserService {
     }
   }
 
+  /**
+   *
+   * @param {string} userRequestingId
+   * @param {string} userRequestedId
+   * @returns
+   */
   async acceptConnection (userRequestingId, userRequestedId) {
     try {
       const userRequesting = await User.findById({ _id: userRequestingId }) // User 1
@@ -136,6 +148,7 @@ class UserService {
     }
   }
 
+  // Checks if both users have each other as a connection
   async checkConnection (user1Id, user2Id) {
     const user1 = await User.findById({ _id: user1Id })
     const user2 = await User.findById({ _id: user2Id })

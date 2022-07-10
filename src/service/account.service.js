@@ -37,6 +37,7 @@ class AccountService {
     }
   }
 
+  // Returns a random 10 digit account
   generateAccount () {
     let randomAccount = ''
     for (let i = 0; i < 10; i++) {
