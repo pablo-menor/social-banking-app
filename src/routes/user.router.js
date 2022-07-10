@@ -37,4 +37,14 @@ router.get('/contacts', verifyToken, async (req, res) => {
     res.status(400).json({ message: 'Something went wrong.' })
   }
 })
+
+router.get('/:userId', verifyToken, async (req, res) => {
+  const user = await userService.findById(req.params.userId)
+  if (user) {
+    delete user.password
+    res.json(user)
+  } else {
+    res.status(400).json({ message: 'Something went wrong.' })
+  }
+})
 module.exports = router
