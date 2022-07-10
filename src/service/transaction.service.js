@@ -10,10 +10,10 @@ class TransactionService {
       const sender = await userService.findById(senderId)
       const receiver = await userService.findById(receiverId)
 
-      if (await accountService.getBalance(sender.account.number) < amount) {
-        console.log('fdfd')
+      if (await accountService.getBalance(sender.account.number) < amount || !await userService.checkConnection(senderId, receiverId)) {
         return false
       }
+
       const isMoneySent = await accountService.sendMoney(
         sender.account.number,
         receiver.account.number,

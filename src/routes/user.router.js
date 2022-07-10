@@ -7,8 +7,7 @@ const userService = new UserService()
 
 router.post('/add/:accountNumber', verifyToken, async (req, res) => {
   const userInvited = await userService.findByAccount(req.params.accountNumber)
-
-  if (userInvited && userService.requestConnection(req.user, userInvited)) {
+  if (userInvited && await userService.requestConnection(req.user, userInvited)) {
     res.json({ message: 'Invitation sent.' })
   } else {
     res.status(400).json({ message: 'Something went wrong.' })

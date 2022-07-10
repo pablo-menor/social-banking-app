@@ -136,6 +136,30 @@ class UserService {
     }
   }
 
+  async checkConnection (user1Id, user2Id) {
+    const user1 = await User.findById({ _id: user1Id })
+    const user2 = await User.findById({ _id: user2Id })
+    let isAConnection1 = false
+    let isAConnection2 = false
+    user1.contacts.forEach(contact => {
+      if (contact.account === user2.account.number) {
+        isAConnection1 = true
+      }
+    })
+
+    user2.contacts.forEach(contact => {
+      if (contact.account === user1.account.number) {
+        isAConnection2 = true
+      }
+    })
+
+    if (isAConnection1 && isAConnection2) {
+      return true
+    }
+
+    return false
+  }
+
   async getContactList (userId) {
     try {
       const user = await User.findOne({ _id: userId })
